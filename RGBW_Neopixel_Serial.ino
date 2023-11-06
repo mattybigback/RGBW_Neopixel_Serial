@@ -3,7 +3,7 @@
 Control a single RGBW Neopixel by sending 4 byte strings over serial
 
 Author: Matt Harrison
-Repo: 
+Repo: http://github.com/mattybigback/RGBW_Neopixel_Serial
 
 Required Libraries:
     * NeoPixelBus v2.7.5 - https://github.com/Makuna/NeoPixelBus

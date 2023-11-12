@@ -4,6 +4,15 @@ Control a single RGBW Neopixel by sending 4 byte strings over serial
 Author: Matt Harrison
 Repo: http://github.com/mattybigback/RGBW_Neopixel_Serial
 
+Expects a 7 byte string. The below example sets the LED to be red at 100% intensity.
+
+Start byte:             0x7F
+Red value:              0xFF
+Green value:            0x00
+Blue value:             0x00
+White value:            0x00
+Checksum (Fletcher16):  0x7D7F
+
 */
 #include <Fletcher16.h>  //v0.1.8 - https://github.com/RobTillaart/Fletcher
 #include <NeoPixelBus.h> //v2.7.5 - https://github.com/Makuna/NeoPixelBus

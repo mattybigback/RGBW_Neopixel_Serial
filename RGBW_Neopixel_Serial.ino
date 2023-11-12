@@ -38,7 +38,7 @@ void setup() {
 }
 
 uint8_t *receive_serial_packet() {
-    static uint8_t serial_instruction[7] = {0, 0, 0, 0, 0, 0, 0};
+    static uint8_t serial_instruction[7];
     while (Serial.available() > 0) {
         size_t ser_buffer = Serial.readBytes(serial_instruction, 7);
 
@@ -80,12 +80,13 @@ void loop() {
         uint8_t *serial_packet;
         serial_packet = receive_serial_packet();
 
+        // If packet is valid set LED
         if (serial_packet[0] != 0xff) {
             set_LEDs(serial_packet);
         }
 
         // clear buffer
-        for(uint8_t i=0;i<7;i++){
+        for (uint8_t i = 0; i < 7; i++) {
             serial_packet[i] = 0;
         }
     }

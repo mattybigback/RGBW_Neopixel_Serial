@@ -20,21 +20,24 @@ Checksum (Fletcher16):  0x7D7F
 #define NUM_LEDS 1
 #define NEO_PIN 3
 
+#define DEBUG false // Set to true to see debug messages in serial monitor
+
 NeoPixelBus<NeoGrbwFeature, NeoWs2812xMethod> pixel(NUM_LEDS, NEO_PIN);
 
 void setup() {
     Serial.begin(9600);
     while (!Serial)
-        ; // wait for serial
+        ; // wait for serial port to initialise
 
     Serial.setTimeout(30);
 
     // Initialise and turn off the LED
     pixel.Begin();
     pixel.Show();
-
-    Serial.println();
-    Serial.println("Ready to receive commands");
+    if (DEBUG == true) {
+        Serial.println();
+        Serial.println("Ready to receive commands");
+    }
 }
 
 uint8_t *receive_serial_packet() {
@@ -54,10 +57,13 @@ uint8_t *receive_serial_packet() {
             checksum.add(serial_instruction[i]);
         }
 
+        // Calculate checksum of what was received
         uint16_t calculated_checksum = checksum.getFletcher();
 
         if (serial_instruction[0] == 0x7f && calculated_checksum == received_checksum) {
-            Serial.println("valid message!");
+            if (DEBUG == true) {
+                Serial.println("valid message!");
+            }
             return serial_instruction;
         } else {
             serial_instruction[0] = 0xff;
@@ -67,10 +73,13 @@ uint8_t *receive_serial_packet() {
 }
 
 void set_LEDs(uint8_t packet[]) {
-    Serial.println("setting LED");
-    for (uint8_t i = 1; i < 5; i++) {
-        Serial.println(packet[i], HEX);
+    if (DEBUG == true) {
+        Serial.println("setting LED");
+        for (uint8_t i = 1; i < 5; i++) {
+            Serial.println(packet[i], HEX);
+        }
     }
+    
     pixel.SetPixelColor(0, RgbwColor(packet[1], packet[2], packet[3], packet[4]));
     pixel.Show();
 }
